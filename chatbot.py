@@ -1,34 +1,36 @@
 from dotenv import load_dotenv
-import spoonacular,os
+import spoonacular
+import os
 from spoonacular.rest import ApiException
 from pprint import pprint
 
+# Load environment variables from .env file
 load_dotenv()
 
-# Defining the host is optional and defaults to https://api.spoonacular.com
-# See configuration.py for a list of all supported configuration parameters.
+# Set up the configuration with API key authorization
 configuration = spoonacular.Configuration(
-    host = "https://api.spoonacular.com"
+    host="https://api.spoonacular.com"
 )
+configuration.api_key['apiKeyScheme'] = os.environ.get("API_KEY")
 
-# Configure API key authorization: apiKeyScheme
-configuration.api_key['apiKeyScheme'] = os.environ["API_KEY"]
-
-# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-# configuration.api_key_prefix['apiKeyScheme'] = 'Bearer'
-
-
-# Enter a context with an instance of the API client
+# Create an API client instance
 with spoonacular.ApiClient(configuration) as api_client:
-    api_instance = spoonacular.DefaultApi(api_client)
-    analyze_recipe_request = spoonacular.AnalyzeRecipeRequest() 
-    language = 'en' 
-    include_nutrition = True 
-    include_taste = True
+    # Create an instance of the API class
+    api_instance = spoonacular.ProductsApi(api_client)
+    query = 'pork, carrots'  # The search query
+    number = 10  # Number of results to return
 
     try:
-        api_response = api_instance.analyze_recipe(analyze_recipe_request, language=language, include_nutrition=include_nutrition, include_taste=include_taste)
-        print("The response of DefaultApi->analyze_recipe:\n")
-        pprint(api_response)
+        # Autocomplete Product Search
+        api_response = api_instance.autocomplete_product_search(query, number=number)
+        
+        # Extract and print only the product titles
+        results = [result.title for result in api_response.results]
+        print("Product Titles:")
+        for title in results:
+            print(f"- {title}")
+
     except ApiException as e:
-        print("Exception when calling DefaultApi->analyze_recipe: %s\n" % e)
+        print(f"Exception when calling ProductsApi->autocomplete_product_search: {e}\n")
+    except Exception as e:
+        print(f"Unexpected error: {e}\n")

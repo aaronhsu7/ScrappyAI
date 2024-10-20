@@ -29,7 +29,7 @@ class GetConversationSuggests200ResponseSuggests(BaseModel):
     """
     GetConversationSuggests200ResponseSuggests
     """ # noqa: E501
-    : Annotated[List[GetConversationSuggests200ResponseSuggestsInner], Field(min_length=0)] = Field(alias="_")
+    suggests : Annotated[List[GetConversationSuggests200ResponseSuggestsInner], Field(min_length=0)] = Field(alias="_")
     __properties: ClassVar[List[str]] = ["_"]
 
     model_config = {
@@ -73,8 +73,8 @@ class GetConversationSuggests200ResponseSuggests(BaseModel):
         )
         # override the default output from pydantic by calling `to_dict()` of each item in  (list)
         _items = []
-        if self.:
-            for _item in self.:
+        if self.suggests:
+            for _item in self.suggests:
                 if _item:
                     _items.append(_item.to_dict())
             _dict['_'] = _items

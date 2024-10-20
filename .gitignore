@@ -1,3 +1,5 @@
 spoonacular/models/__pycache__/*
 spoonacular/__pycache__/*
 spoonacular/api/__pycache__/*
+venv/*
+.DS_Store
